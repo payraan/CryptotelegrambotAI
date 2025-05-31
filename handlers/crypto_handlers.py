@@ -2,6 +2,7 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ContextTypes
 from services.coinstats_service import coinstats_service
 from services.direct_api_service import direct_api_service
+from utils.media_handler import media_handler
 from services.holderscan_service import holderscan_service
 from utils.crypto_formatter import (
     format_market_overview, format_error_message,
@@ -72,19 +73,25 @@ async def crypto_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
             [InlineKeyboardButton("💰 نارموون کوین", callback_data="narmoon_coin")],
             [InlineKeyboardButton("🔙 بازگشت به منوی اصلی", callback_data="main_menu")]
         ]
+        reply_markup = InlineKeyboardMarkup(keyboard)
 
-        if query:
-            await query.edit_message_text(
-                message,
-                reply_markup=InlineKeyboardMarkup(keyboard),
-                parse_mode='Markdown'
-            )
-        else:
-            await update.message.reply_text(
-                message,
-                reply_markup=InlineKeyboardMarkup(keyboard),
-                parse_mode='Markdown'
-            )
+        # تلاش برای ارسال با گیف
+        media_sent = await media_handler.send_crypto_menu_media(update, context, message, reply_markup)
+        
+        # اگر گیف ارسال نشد، fallback به متن ساده
+        if not media_sent:
+            if query:
+                await query.edit_message_text(
+                    message,
+                    reply_markup=reply_markup,
+                    parse_mode='Markdown'
+                )
+            else:
+                await update.message.reply_text(
+                    message,
+                    reply_markup=reply_markup,
+                    parse_mode='Markdown'
+                )
 
     except Exception as e:
         print(f"Error in crypto_menu: {e}")
@@ -95,16 +102,20 @@ async def crypto_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
             [InlineKeyboardButton("🔙 بازگشت", callback_data="main_menu")]
         ]
 
-        if query:
-            await query.edit_message_text(
-                error_message,
-                reply_markup=InlineKeyboardMarkup(keyboard),
-            )
-        else:
-            await update.message.reply_text(
-                error_message,
-                reply_markup=InlineKeyboardMarkup(keyboard),
-            )
+        # تلاش برای ارسال گیف خطا
+        media_sent = await media_handler.send_crypto_menu_media(update, context, error_message, InlineKeyboardMarkup(keyboard))
+        
+        if not media_sent:
+            if query:
+                await query.edit_message_text(
+                    error_message,
+                    reply_markup=InlineKeyboardMarkup(keyboard),
+                )
+            else:
+                await update.message.reply_text(
+                    error_message,
+                    reply_markup=InlineKeyboardMarkup(keyboard),
+                )
 
     return CRYPTO_MENU
 
