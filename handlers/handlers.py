@@ -123,18 +123,21 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """
     
     # اگر callback_query داریم (برگشت به منوی اصلی)
-    if update.callback_query:
-        await update.callback_query.edit_message_text(
-            welcome_text,
-            reply_markup=main_menu_markup,
-            parse_mode='Markdown'
-        )
+        if update.callback_query:
+            await update.callback_query.edit_message_text(
+                welcome_text,
+                reply_markup=main_menu_markup,
+                parse_mode='Markdown'
+            )
+        else:
+            await update.message.reply_text(
+                welcome_text,
+                reply_markup=main_menu_markup,
+                parse_mode='Markdown'
+            )
     else:
-        await update.message.reply_text(
-            welcome_text,
-            reply_markup=main_menu_markup,
-            parse_mode='Markdown'
-        )
+        # GIF sent successfully, no need for text fallback
+        pass
 
 async def handle_main_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """پردازش دکمه‌های فشرده شده در منوی اصلی"""
