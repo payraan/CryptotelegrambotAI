@@ -3,6 +3,7 @@ import asyncio
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ContextTypes, ConversationHandler
 from datetime import datetime
+from utils.media_handler import media_handler
 from config.constants import (
     MAIN_MENU, SELECTING_MARKET, SELECTING_TIMEFRAME,
     SELECTING_STRATEGY, WAITING_IMAGES, PROCESSING_ANALYSIS,
@@ -102,10 +103,15 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     main_menu_markup = InlineKeyboardMarkup(main_menu_buttons)
     
-    # دریافت نام کاربر برای شخصی‌سازی پیام
-    user_name = update.effective_user.first_name if update.effective_user.first_name else "کاربر"
-    
-    welcome_text = f"""
+    # تلاش برای ارسال با رسانه
+    print(f"🔍 DEBUG: About to call media_handler...")
+    media_sent = await media_handler.send_welcome_media(update, context, main_menu_markup)
+    print(f"🔍 DEBUG: media_sent result: {media_sent}")
+
+    # اگر رسانه ارسال نشد، متن ساده ارسال کن
+    if not media_sent:
+        user_name = update.effective_user.first_name if update.effective_user.first_name else "کاربر"
+        welcome_text = f"""
 سلام {user_name} عزیز! 👋✨ به دستیار هوش مصنوعی معامله‌گری نارموون خوش اومدی!
 
 🚀 اینجا می‌تونی:
@@ -114,7 +120,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 - سیگنال بگیری و همیشه یک قدم جلوتر از بازار باشی
 
 🔹 برای شروع می‌تونی از منوی پایین یکی از گزینه‌ها رو انتخاب کنی!
-"""
+    """
     
     # اگر callback_query داریم (برگشت به منوی اصلی)
     if update.callback_query:
@@ -129,8 +135,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
             reply_markup=main_menu_markup,
             parse_mode='Markdown'
         )
-    
-    return MAIN_MENU
 
 async def handle_main_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """پردازش دکمه‌های فشرده شده در منوی اصلی"""
