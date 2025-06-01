@@ -53,15 +53,28 @@ class MediaHandler:
                 
                 with open(gif_path, 'rb') as gif:
                     if edit_message and update.callback_query:
-                        await update.callback_query.delete_message()
-                    
-                    await context.bot.send_animation(
-                        chat_id=update.effective_chat.id,
-                        animation=gif,
-                        caption=text,
-                        reply_markup=reply_markup,
-                        parse_mode='Markdown'
-                    )
+                        # بجای delete، فقط send جدید
+                        await context.bot.send_animation(
+                            chat_id=update.effective_chat.id,
+                            animation=gif, 
+                            caption=text,
+                            reply_markup=reply_markup,
+                            parse_mode='Markdown'
+                        )
+                        # حذف پیام قبلی بعد از ارسال موفق
+                        try:
+                            await update.callback_query.delete_message()
+                        except:
+                            pass  # اگر پیام قبلی حذف نشد، مهم نیست
+                    else:
+                        # ارسال جدید
+                        await context.bot.send_animation(
+                            chat_id=update.effective_chat.id,
+                            animation=gif,
+                            caption=text,
+                            reply_markup=reply_markup,
+                            parse_mode='Markdown'
+                        )
                 
                 print(f"✅ {gif_name} GIF sent successfully!")
                 return True
@@ -69,7 +82,7 @@ class MediaHandler:
             except Exception as e:
                 print(f"❌ Error sending {gif_name} GIF: {e}")
         
-        # اگر گیف موجود نباشد، فقط متن ارسال کن
+        # اگر گیف موجود نباشد، فقط متن ارسال کن   
         if edit_message and update.callback_query:
             await update.callback_query.edit_message_text(
                 text=text,
