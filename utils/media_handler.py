@@ -45,6 +45,8 @@ class MediaHandler:
 
     async def send_gif_with_text(self, update, context, gif_name, text, reply_markup=None, edit_message=False):
         """ارسال گیف همراه با متن"""
+        return False  # موقتاً غیرفعال برای تست
+        
         gif_path = self.get_gif_path(gif_name)
         
         if gif_path and self.file_exists(gif_path):
