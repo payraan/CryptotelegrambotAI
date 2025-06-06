@@ -150,9 +150,9 @@ def tnt_plans_migration():
         
         default_plans = [
             ('FREE', 'رایگان', 0.00, 0, 0, False),
-            ('TNT_MINI', 'TNT MINI', 10.00, 60, 2, False),
-            ('TNT_PLUS', 'TNT PLUS+', 18.00, 150, 4, False),
-            ('TNT_MAX', 'TNT MAX', 39.00, 400, 8, True)
+            ('TNT_MINI', 'TNT MINI', 6.00, 60, 2, False),
+            ('TNT_PLUS', 'TNT PLUS+', 10.00, 150, 4, False),
+            ('TNT_MAX', 'TNT MAX', 22.00, 400, 8, True)
         ]
         
         for plan_name, display_name, price, monthly_limit, hourly_limit, vip_access in default_plans:

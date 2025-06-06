@@ -280,9 +280,9 @@ async def admin_activate_tnt(update: Update, context: ContextTypes.DEFAULT_TYPE)
             await update.message.reply_text(
                 "فرمت صحیح: /activatetnt user_id plan_name duration\n\n"
                 "پلن‌های موجود:\n"
-                "• TNT_MINI: $10 (60 تحلیل/ماه، 2 تحلیل/ساعت)\n"
-                "• TNT_PLUS: $18 (150 تحلیل/ماه، 4 تحلیل/ساعت)\n"
-                "• TNT_MAX: $39 (400 تحلیل/ماه، 8 تحلیل/ساعت + VIP)\n\n"
+                "• TNT_MINI: $6 (60 تحلیل/ماه، 2 تحلیل/ساعت)\n"
+                "• TNT_PLUS: $10 (150 تحلیل/ماه، 4 تحلیل/ساعت)\n"
+                "• TNT_MAX: $22 (400 تحلیل/ماه، 8 تحلیل/ساعت + VIP)\n\n"
                 "مثال: /activatetnt 123456789 TNT_MINI 1"
             )
             return
