@@ -28,7 +28,7 @@ API_KEYS = {
 # لینک‌های محصولات نارموون
 NARMOON_DEX_LINK = "https://chatgpt.com/g/g-681e61f1baa88191bf50a82156694a79-narmoon-dex"
 NARMOON_COIN_LINK = "https://chatgpt.com/g/g-681e68b8ccf08191b5e53b91b4f09c6e-narmoon-coin"
-TUTORIAL_VIDEO_LINK = "https://youtube.com/your_future_video_link"
+TUTORIAL_VIDEO_LINK = "https://www.youtube.com/watch?v=WjQzb7rBboM"
 
 # Base URLs برای API ها - به‌روزرسانی شده
 BASE_URLS = {
